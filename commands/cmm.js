@@ -4,23 +4,23 @@ const canva = require('canvacord');
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('cmm')
-    .setDescription('Change my mind')
+    .setDescription('Change my mind.')
     .addStringOption(option => option
         .setName('input')
-        .setDescription('Valami frappáns szöveg')
+        .setDescription('Something snappy string')
         .setRequired(true))
     .setDMPermission(true)
     .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
     async execute(interaction) {
-        const string = interaction.options.getString('input');
-        const image = await canva.Canvas.changemymind(string);
-        const file = await new AttachmentBuilder(image)
+        const inputString = interaction.options.getString('input');
+        const baseImage = await canva.Canvas.changemymind(inputString);
+        const attachment = await new AttachmentBuilder(baseImage, {name: "change-my-mind.jpg"})
 
         const embed = new EmbedBuilder()
-            .setTitle(`Change My Mind`)
-            .setImage('attachment://file.jpg')
+            .setTitle(`Change my mind`)
+            .setImage('attachment://change-my-mind.jpg')
             .setColor('Random');
 
-        await interaction.reply({embeds: [embed], files: [file]});
+        await interaction.reply({embeds: [embed], files: [attachment]});
     },
 };
