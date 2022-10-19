@@ -2,6 +2,6 @@ module.exports = {
     name: 'ready',
     once: true,
     execute(client) {
-        console.log(`Sikeresen elindult ${client.user.tag}!`);
+        console.log(`Successfully started ${client.user.tag}!`);
         },
 };
