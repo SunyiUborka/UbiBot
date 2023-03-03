@@ -1,6 +1,6 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from 'discord.js'
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('ms')
         .setDescription('Bot respond time.')

@@ -1,14 +1,16 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
-const { Configuration, OpenAIApi } = require('openai');
-const wait = require('node:timers/promises').setTimeout;
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from 'discord.js'
+import { Configuration, OpenAIApi } from 'openai'
+import { setTimeout } from 'node:timers/promises'
+import dotenv from 'dotenv'
 
-const dotenv = require('dotenv').config()
+dotenv.config()
+
 const conf = new Configuration({
     apiKey: process.env.OPENAI_API_KEY
 })
 const openai = new OpenAIApi(conf);
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
     .setName('chat')
     .setDescription('Chat with OpenAI.')
@@ -35,7 +37,7 @@ module.exports = {
         .setDescription(`\ ${response.data.choices[0].text}`)
         .setColor('Random');
 
-        await wait(15000)
+        await setTimeout(15000)
         await interaction.editReply({ embeds: [embed]})
 
         },

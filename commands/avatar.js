@@ -1,6 +1,6 @@
-const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+import { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } from 'discord.js'
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('avatar')
         .setDescription('Get your or other avatar!')

@@ -1,7 +1,7 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const Canvas = require('canvas');
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, AttachmentBuilder } from 'discord.js'
+import  Canvas from 'canvas'
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('license')
         .setDescription('Horny license.')

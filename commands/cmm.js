@@ -1,7 +1,7 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const canva = require('canvacord');
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, AttachmentBuilder } from 'discord.js'
+import canva from 'canvacord'
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
     .setName('cmm')
     .setDescription('Change my mind.')
