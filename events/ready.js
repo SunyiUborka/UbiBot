@@ -31,8 +31,7 @@ export default {
                         .setTitle(`${dom_hor.window.document.querySelector(`.jegy-adatok .title`).textContent}`)
                         .setColor('Random')
                         .setDescription(`${dom_hor.window.document.querySelector(".details .details-content").textContent}`);
-                        client.channels.cache.get('1002844143875260477').send({embeds: [embed]})
-
+                        client.channels.cache.get('1104400360321331331').send({embeds: [embed]})
                     })
                 })
 
