@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const dotenv = require('dotenv').config();
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildVoiceStates] });
 
 client.commands = new Collection();
 
@@ -23,13 +23,13 @@ for (const file of commandFiles) {
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
     const event = require(filePath);
-    try {
+    try{
         if (event.once) {
             client.once(event.name, (...args) => event.execute(...args));
         } else {
             client.on(event.name, (...args) => event.execute(...args));
         }
-    } catch (err){
+    } catch(err){
         console.log(err)
     }
 }
@@ -45,7 +45,7 @@ client.on(Events.InteractionCreate, async interaction => {
         await command.execute(interaction, client);
     } catch (error) {
         console.error(error);
-        await interaction.reply({ content: 'I think something went wrong! :(', ephemeral: true });
+        await interaction.reply({ content: 'Azt hiszem baj van!', ephemeral: true });
     }
 });
 

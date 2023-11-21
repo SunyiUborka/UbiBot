@@ -13,7 +13,7 @@ module.exports = {
             if(serverImage === null) return await interaction.reply("The server does not yet have an image.")
 
             const embed = new EmbedBuilder()
-                .setTitle(`The ${server.name}'s image.`)
+                .setTitle(`$The {server.name}'s image.`)
                 .setImage(serverImage)
                 .setColor('Random');
 

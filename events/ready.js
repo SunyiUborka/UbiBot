@@ -2,6 +2,12 @@ module.exports = {
     name: 'ready',
     once: true,
     execute(client) {
-        console.log(`Successfully started ${client.user.tag}!`);
+        client.user.setPresence({
+            activities: [{
+                name: "When a bot get mental breakdown"
+            }],
+            status: "dnd"
+        });
+        console.log(`Sikeresen elindult ${client.user.tag}!`);
         },
 };
