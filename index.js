@@ -3,10 +3,19 @@ import fs from 'node:fs'
 import path from 'node:path'
 import * as dotenv from 'dotenv'
 import { fileURLToPath } from "url";
+import {MongoClient} from "mongodb";
 
 dotenv.config()
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildPresences
+    ]
+});
 
 client.commands = new Collection();
 
@@ -31,9 +40,9 @@ for (const file of eventFiles) {
     const event = await import(filePath);
     try {
         if (event.once) {
-            client.once(event.default.name, (...args) => event.default.execute(...args));
+            client.once(event.default.name, (...args) => event.default.execute(...args, client));
         } else {
-            client.on(event.default.name, (...args) => event.default.execute(...args));
+            client.on(event.default.name, (...args) => event.default.execute(...args, client));
         }
     } catch (err){
         console.log(err)
@@ -49,8 +58,10 @@ client.on(Events.InteractionCreate, async interaction => {
 
     try {
         await command.default.execute(interaction, client);
-    } catch (error) {
-        console.error(error);
+    } catch (e) {
+        if (e === "invalid_request_error") return await interaction.editReply({ content:  'Explicit tartalom', ephemeral: true })
+        if (interaction.deferred) return await interaction.editReply({ content:  'I think something went wrong! :(', ephemeral: true });
+        //console.log(interaction)
         await interaction.reply({ content: 'I think something went wrong! :(', ephemeral: true });
     }
 });
