@@ -13,8 +13,16 @@ export default {
         schedule('*/30 * * * *', ()=>{
             getApi(client)
         })
+        
+        schedule('0 12 * * *', ()=>{
+            client.channels.cache.get('1104371965000687639').send(`# <@361904030735138828> már ${Math.floor(Math.abs((new Date() - new Date('2023.05.31')) / (1000 * 60 * 60 * 24)))} napja munkanélküli.`)
+        }, {
+            scheduled: true,
+            timezone: "Europe/Budapest"
+        })
 
-        schedule('0 7 * * *', ()=>{
+
+        /*schedule('0 7 * * *', ()=>{
             axios.get(`https://www.astronet.hu/horoszkop/`)
             .then(res => {
                 let hor = new Set();
@@ -40,7 +48,7 @@ export default {
         }, {
             scheduled: true,
             timezone: "Europe/Budapest"
-        })
+        })*/
     },
 };
 
