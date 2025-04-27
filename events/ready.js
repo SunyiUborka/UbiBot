@@ -2,6 +2,15 @@ import axios from "axios";
 import {JSDOM} from "jsdom";
 import {EmbedBuilder, Events} from "discord.js";
 import {schedule} from "node-cron";
+import { OpenAI } from "openai";
+import { setTimeout } from "node:timers/promises";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export default {
     name: Events.ClientReady,
@@ -13,9 +22,13 @@ export default {
         schedule('*/30 * * * *', ()=>{
             getApi(client)
         })
-        
-        schedule('0 12 * * *', ()=>{
-            client.channels.cache.get('1104371965000687639').send(`# <@361904030735138828> már ${Math.floor(Math.abs((new Date() - new Date('2023.05.31')) / (1000 * 60 * 60 * 24)))} napja munkanélküli.`)
+
+        schedule('0 12 * * *', async ()=>{
+                const chat = await openai.chat.completions.create({
+                    messages: [{ role: "user", content: `kérlek irj egy kis üzenetet arról, hogy Gergő már ${Math.floor(Math.abs((new Date() - new Date('2023.05.31')) / (1000 * 60 * 60 * 24)))} napja munkanélküli, de úgy, hogy az üzenetben Gergőre "GERGO" ként hivatkozol és ne legyen benne aláirás` }],
+                    model: "gpt-4o",
+                  });
+            client.channels.cache.get('1104371965000687639').send(`# ${chat.choices[0].message.content.replaceAll("GERGO", "<@361904030735138828>")}`)
         }, {
             scheduled: true,
             timezone: "Europe/Budapest"

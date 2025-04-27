@@ -60,7 +60,7 @@ client.on(Events.InteractionCreate, async interaction => {
         await command.default.execute(interaction, client);
     } catch (e) {
         if (e === "invalid_request_error") return await interaction.editReply({ content:  'Explicit tartalom', ephemeral: true })
-        if (interaction.deferred) return await interaction.editReply({ content:  'I think something went wrong! :(', ephemeral: true });
+        if (interaction.deferred) return await interaction.editReply({ content:  'I think something went wrong! :( deferred', ephemeral: true });
         //console.log(interaction)
         await interaction.reply({ content: 'I think something went wrong! :(', ephemeral: true });
     }

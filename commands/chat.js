@@ -32,7 +32,7 @@ export default {
 
     const chat = await openai.chat.completions.create({
       messages: [{ role: "user", content: inputString }],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
     });
 
     const embed = new EmbedBuilder()
