@@ -1,0 +1,24 @@
+services:
+  node:
+    image: "node:18"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./src/:/home/node/app/
+    restart: always
+    command: bash -c "npm install && node ."
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: project
+      MONGODB_CONNSTRING: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongo
+    volumes:
+      - ./db:/data/db
+    command: mongod --auth --bind_ip_all
