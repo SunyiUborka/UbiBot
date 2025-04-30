@@ -30,22 +30,25 @@ const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'
 
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const command = await import(filePath);
-
-    client.commands.set(command.default.data.name, command);
+    const { default: command } = await import(filePath);
+    if (command?.data?.name) {
+        client.commands.set(command.data.name, command);
+    } else {
+        console.log(`Incorrect command: ${file}`);
+    }
 }
 
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
-    const event = await import(filePath);
+    const { default: event } = await import(filePath);
     try {
         if (event.once) {
-            client.once(event.default.name, (...args) => event.default.execute(...args, client));
+            client.once(event.name, (...args) => event.execute(...args, client));
         } else {
-            client.on(event.default.name, (...args) => event.default.execute(...args, client));
+            client.on(event.name, (...args) => event.execute(...args, client));
         }
     } catch (err){
-        console.log(err)
+        console.log(`Error handling event: ${file}`, err);
     }
 }
 
@@ -54,15 +57,18 @@ client.on(Events.InteractionCreate, async interaction => {
 
     const command = interaction.client.commands.get(interaction.commandName);
 
-    if (!command) return;
+    if (!command) {
+        console.log(`Command not found: ${interaction.commandName}`);
+        return;
+    }
 
     try {
-        await command.default.execute(interaction, client);
+        await command.execute(interaction, client);
     } catch (e) {
-        if (e === "invalid_request_error") return await interaction.editReply({ content:  'Explicit tartalom', ephemeral: true })
-        if (interaction.deferred) return await interaction.editReply({ content:  'I think something went wrong! :( deferred', ephemeral: true });
-        //console.log(interaction)
+        if (e === "invalid_request_error") return await interaction.editReply({ content:  'Explicit tartalom', ephemeral: true });
+        if (interaction.deferred) return await interaction.editReply({ content: 'I think something went wrong! :( deferred', ephemeral: true });
         await interaction.reply({ content: 'I think something went wrong! :(', ephemeral: true });
+        console.error(e);
     }
 });
 
