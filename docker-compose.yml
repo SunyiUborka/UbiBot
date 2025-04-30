@@ -1,5 +1,5 @@
 services:
-  node:
+  node-run:
     image: "node:18"
     user: "node"
     working_dir: /home/node/app
@@ -8,7 +8,28 @@ services:
     volumes:
       - ./src/:/home/node/app/
     restart: always
-    command: bash -c "npm install && node ."
+    command: bash -c "node ."
+    depends_on:
+      - node-deploy
+      - node-install
+  node-deploy:
+      image: "node:18"
+      user: "node"
+      working_dir: /home/node/app
+      environment:
+        - NODE_ENV=production
+      volumes:
+        - ./src/:/home/node/app/
+      command: bash -c "node ./deploy-commands.js"
+  node-install:
+    image: "node:18"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./src/:/home/node/app/
+    command: bash -c "npm install"
   mongo:
     image: mongo
     restart: always
