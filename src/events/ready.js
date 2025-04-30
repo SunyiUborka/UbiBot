@@ -1,9 +1,7 @@
 import axios from "axios";
-import {JSDOM} from "jsdom";
 import {EmbedBuilder, Events} from "discord.js";
 import {schedule} from "node-cron";
 import { OpenAI } from "openai";
-import { setTimeout } from "node:timers/promises";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -33,34 +31,6 @@ export default {
             scheduled: true,
             timezone: "Europe/Budapest"
         })
-
-
-        /*schedule('0 7 * * *', ()=>{
-            axios.get(`https://www.astronet.hu/horoszkop/`)
-            .then(res => {
-                let hor = new Set();
-                let dom = new JSDOM(res.data)
-                dom.window.document.querySelectorAll('.gyujto-jegyek .jegy-details').forEach(link => {
-                    hor.add(link.href)
-                })
-
-                hor.forEach((value)=>{
-                    axios.get(`https://www.astronet.hu/${value}`).then(res=>{
-                        let dom_hor = new JSDOM(res.data);
-
-                        const embed = new EmbedBuilder()
-                        .setTitle(`${dom_hor.window.document.querySelector(`.jegy-adatok .title`).textContent}`)
-                        .setColor('Random')
-                        .setDescription(`${dom_hor.window.document.querySelector(".details .details-content").textContent}`);
-                        client.channels.cache.get('1104400360321331331').send({embeds: [embed]})
-                    })
-                })
-
-            })
-        }, {
-            scheduled: true,
-            timezone: "Europe/Budapest"
-        })*/
     },
 };
 
