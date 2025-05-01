@@ -3,6 +3,7 @@ import {EmbedBuilder, Events} from "discord.js";
 import {schedule} from "node-cron";
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
+import { connectDB } from '../utils/database.js'
 
 dotenv.config();
 
@@ -13,9 +14,9 @@ const openai = new OpenAI({
 export default {
     name: Events.ClientReady,
     once: true,
-    execute(client) {
+    async execute(client) {
         console.log(`Successfully started ${client.user.tag}!`);
-
+        await connectDB()
         getApi(client)
         schedule('*/30 * * * *', ()=>{
             getApi(client)

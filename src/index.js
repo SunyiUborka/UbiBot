@@ -3,7 +3,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import * as dotenv from 'dotenv'
 import { fileURLToPath } from "url";
-import {MongoClient} from "mongodb";
 
 dotenv.config()
 
