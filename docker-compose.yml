@@ -1,6 +1,6 @@
 services:
   node-run:
-    image: "node:18"
+    image: "node:23.7"
     user: "node"
     working_dir: /home/node/app
     environment:
@@ -12,8 +12,9 @@ services:
     depends_on:
       - node-deploy
       - node-install
+      - mongo
   node-deploy:
-      image: "node:18"
+      image: "node:23.7"
       user: "node"
       working_dir: /home/node/app
       environment:
@@ -21,8 +22,10 @@ services:
       volumes:
         - ./src/:/home/node/app/
       command: bash -c "node ./deploy-commands.js"
+      depends_on:
+        - node-install
   node-install:
-    image: "node:18"
+    image: "node:23.7"
     user: "node"
     working_dir: /home/node/app
     environment:
@@ -36,10 +39,9 @@ services:
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: project
-      MONGODB_CONNSTRING: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongo
+      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_ROOT_USER}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_ROOT_PASSWORD}"
+      MONGODB_CONNSTRING: "${MONGODB_URI}"
     volumes:
       - ./db:/data/db
     command: mongod --auth --bind_ip_all
