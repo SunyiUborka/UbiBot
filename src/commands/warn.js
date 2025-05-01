@@ -1,4 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } from 'discord.js'
+import Warn from '../utils/Models/Warn.js'
 
 export default {
     data: new SlashCommandBuilder()
@@ -6,13 +7,19 @@ export default {
         .setDescription('Warn user')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
-        .addUserOption(option => option.setName('user').setDescription('user'))
+        .addUserOption(option => option.setName('user').setDescription('User who do you want to warn.'))
         .addStringOption(option => option
-            .setName('input')
+            .setName('message')
             .setDescription('Warn message')
-            .setRequired(false)),
+            .setRequired(true)),
         async execute(interaction, client) {
-            let a = interaction.options.getUser('user')
+            let user = interaction.options.getUser('user')
             let msg = interaction.options.getString('input')
+
+            Warn.create({
+                author: interaction.user.id,
+                user: user.id,
+                msg: msg
+            })
         },
 };
