@@ -7,25 +7,41 @@ export default {
         .setDescription('Report user')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
-        .addUserOption(option => option
+        .addSubcommand(s=> s
             .setName('user')
             .setDescription('User who do you want to report.')
-            .setRequired(true))
-        .addStringOption(option => option
-            .setName('message')
-            .setDescription('Report message')
-            .setRequired(true)),
+            .addUserOption(option => option
+                .setName('user')
+                .setDescription('User who do you want to report.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('message')
+                .setDescription('Report message')
+                .setRequired(true))
+        )
+        .addSubcommand(s=> s
+            .setName('list')
+            .setDescription('List reports')
+        ),
         async execute(interaction) {
+            const subcommand = interaction.options.getSubcommand()
             let user = interaction.options.getUser('user')
-            let msg = interaction.options.getString('message')
+            const msg = interaction.options.getString('message')
 
-            Report.create({
-                reportAuthor: interaction.user.id,
-                reportServer: interaction.guildId,
-                reportedUser: user.id,
-                reportMessage: msg
-            })
-
-            interaction.reply({content: `<@${user.id}> has been reported.`, ephemeral: true })
+            switch (subcommand) {
+                case 'user':
+                    Report.create({
+                        reportAuthor: interaction.user.id,
+                        reportServer: interaction.guildId,
+                        reportedUser: user.id,
+                        reportMessage: msg,
+                        reportDate: Date.now()
+                    })
+                    interaction.reply({content: `<@${user.id}> has been reported.`, ephemeral: true })
+                    break;
+                case 'list':
+                    console.log(await Report.find({ reportedUser: interaction.user.id}))
+                    interaction.reply({ content: 'asd', flags: 'Ephemeral'})
+            }
         },
 };

@@ -5,7 +5,7 @@ const reportSchema = new Schema({
     reportServer: String,
     reportedUser: String,
     reportMessage: String,
-    reportDate: { type: Date, default: Date.now()},
+    reportDate: Date,
 })
 
 export default model('Report', reportSchema)
