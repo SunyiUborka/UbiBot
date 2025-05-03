@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-let uri = `mongodb://${process.env.MONGODB_ROOT_USER}:${process.env.MONGODB_ROOT_PASSWORD}@mongo/${process.env.MONGODB_DATABASE}`
+let uri = `mongodb://${process.env.MONGODB_ROOT_USER}:${process.env.MONGODB_ROOT_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}`
 let retryAttempts = 0;
 const maxRetries = 5;
 
