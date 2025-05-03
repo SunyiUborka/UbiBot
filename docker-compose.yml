@@ -1,6 +1,6 @@
 services:
   node-run:
-    image: "node:23.7"
+    image: "node:23.7-slim"
     user: "node"
     working_dir: /home/node/app
     environment:
@@ -14,7 +14,7 @@ services:
       - node-install
       - mongo
   node-deploy:
-      image: "node:23.7"
+      image: "node:23.7-slim"
       user: "node"
       working_dir: /home/node/app
       environment:
@@ -25,7 +25,7 @@ services:
       depends_on:
         - node-install
   node-install:
-    image: "node:23.7"
+    image: "node:23.7-slim"
     user: "node"
     working_dir: /home/node/app
     environment:
