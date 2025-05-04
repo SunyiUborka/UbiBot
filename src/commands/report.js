@@ -1,5 +1,6 @@
-import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js'
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from 'discord.js'
 import Report from '../utils/Models/Report.js'
+import { DateTime } from "luxon";
 
 export default {
     data: new SlashCommandBuilder()
@@ -25,7 +26,7 @@ export default {
         ),
         async execute(interaction) {
             const subcommand = interaction.options.getSubcommand()
-            let user = interaction.options.getUser('user')
+            const user = interaction.options.getUser('user')
             const msg = interaction.options.getString('message')
 
             switch (subcommand) {
@@ -40,8 +41,15 @@ export default {
                     interaction.reply({content: `<@${user.id}> has been reported.`, ephemeral: true })
                     break;
                 case 'list':
-                    console.log(await Report.find({ reportedUser: interaction.user.id}))
-                    interaction.reply({ content: 'asd', flags: 'Ephemeral'})
+                    const reports = await Report.find({reportedUser: interaction.user.id})
+                    const embed = new EmbedBuilder()
+                        .setTitle(`${interaction.user.globalName }'s reports.`)
+                        .addFields(reports.map(r => ({
+                            name: new DateTime(r.reportDate).setZone('Europe/Budapest').toFormat("yyyy.MM.dd"),
+                            value: r.reportMessage
+                        })))
+                    interaction.reply({ embeds: [embed]})
+                    break;
             }
         },
 };
