@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import logger from './logger.js'
 import * as dotenv from 'dotenv'
 dotenv.config()
 
@@ -14,31 +15,31 @@ export async function connectDB() {
       authSource: "admin"
     });
 
-    console.log('✅ Mongoose connected');
+    logger.info('✅ Mongoose connected');
     retryAttempts = 0;
 
     mongoose.connection.on('disconnected', handleDisconnect);
     mongoose.connection.on('error', handleDisconnect);
 
   } catch (error) {
-    console.error('❌ Initial mongoose connection error:', error.message);
+    logger.error('❌ Initial mongoose connection error:', error.message);
     retryReconnect();
   }
 }
 
 function handleDisconnect(err) {
-  console.warn('⚠️ Mongoose disconnected or error:', err?.message || err);
+  logger.warn('⚠️ Mongoose disconnected or error:', err?.message || err);
   retryReconnect();
 }
 
 function retryReconnect() {
   retryAttempts++;
   if (retryAttempts > maxRetries) {
-    console.error('❌ Max retry attempts reached. Giving up.');
+    logger.error('❌ Max retry attempts reached. Giving up.');
     return;
   }
 
   const retryDelay = Math.min(1000 * 2 ** retryAttempts, 30000);
-  console.log(`🔄 Retrying mongoose connect in ${retryDelay / 1000}s (attempt ${retryAttempts}/${maxRetries})`);
+  logger.info(`🔄 Retrying mongoose connect in ${retryDelay / 1000}s (attempt ${retryAttempts}/${maxRetries})`);
   setTimeout(connectDB, retryDelay);
 }

@@ -21,6 +21,7 @@
     "mongodb": "^6.16.0",
     "mongoose": "^8.14.1",
     "node-cron": "^3.0.2",
-    "openai": "^4.57.0"
+    "openai": "^4.57.0",
+    "winston": "^3.17.0"
   }
 }
