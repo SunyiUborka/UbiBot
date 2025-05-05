@@ -22,7 +22,7 @@ export async function connectDB() {
     mongoose.connection.on('error', handleDisconnect);
 
   } catch (error) {
-    logger.error('❌ Initial mongoose connection error:', error.message);
+    logger.error(`❌ Initial mongoose connection error: ${error.message}`);
     retryReconnect();
   }
 }

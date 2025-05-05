@@ -3,6 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import * as dotenv from 'dotenv'
 import { fileURLToPath } from "url";
+import logger from './utils/logger.js'
 
 dotenv.config()
 
@@ -33,7 +34,7 @@ for (const file of commandFiles) {
     if (command?.data?.name) {
         client.commands.set(command.data.name, command);
     } else {
-        console.log(`Incorrect command: ${file}`);
+        logger.error(`Incorrect command: ${file}`);
     }
 }
 
@@ -47,7 +48,7 @@ for (const file of eventFiles) {
             client.on(event.name, (...args) => event.execute(...args, client));
         }
     } catch (err){
-        console.log(`Error handling event: ${file}`, err);
+        logger.error(`Error handling event: ${file}`, err);
     }
 }
 
@@ -57,16 +58,16 @@ client.on(Events.InteractionCreate, async interaction => {
     const command = interaction.client.commands.get(interaction.commandName);
 
     if (!command) {
-        console.log(`Command not found: ${interaction.commandName}`);
+        logger.err(`Command not found: ${interaction.commandName}`);
         return;
     }
 
     try {
         await command.execute(interaction, client);
     } catch (e) {
-        if (e === "invalid_request_error") return await interaction.editReply({ content:  'Explicit tartalom', ephemeral: true });
-        if (interaction.deferred) return await interaction.editReply({ content: 'I think something went wrong! :( deferred', ephemeral: true });
-        await interaction.reply({ content: 'I think something went wrong! :(', ephemeral: true });
+        if (e === "invalid_request_error") return await interaction.editReply({ content:  'Explicit tartalom', flags: "Ephemeral" });
+        if (interaction.deferred) return await interaction.editReply({ content: 'I think something went wrong! :( deferred', flags: "Ephemeral" });
+        await interaction.reply({ content: 'I think something went wrong! :(', flags: "Ephemeral" });
         console.error(e);
     }
 });

@@ -4,6 +4,7 @@ import {schedule} from "node-cron";
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
 import { connectDB } from '../utils/database.js'
+import logger from "../utils/logger.js";
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ export default {
     name: Events.ClientReady,
     once: true,
     async execute(client) {
-        console.log(`Successfully started ${client.user.tag}!`);
+        logger.info(`Successfully started ${client.user.tag}!`);
         await connectDB()
         getApi(client)
         schedule('*/30 * * * *', ()=>{

@@ -6,7 +6,7 @@ export default {
     .setName('reload')
     .setDescription('Reloads all commands.'),
   async execute(interaction) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: "Ephemeral" });
     if (interaction.user.id !== "413741899090886667") {
       return interaction.editReply('This user can\'t use this command.')
     }
