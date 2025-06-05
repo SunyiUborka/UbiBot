@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from 'discord.js'
-import Report from '../utils/Models/Report.js'
+import Report from '../utils/Models/ReportModel.js'
 import { DateTime } from "luxon";
 
 export default {
