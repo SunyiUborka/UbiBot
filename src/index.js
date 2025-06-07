@@ -31,10 +31,14 @@ const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const { default: command } = await import(filePath);
-    if (command?.data?.name) {
-        client.commands.set(command.data.name, command);
-    } else {
-        logger.error(`Incorrect command: ${file}`);
+    try {
+        if (command?.data?.name) {
+            client.commands.set(command.data.name, command);
+        } else {
+            logger.error(`Incorrect command: ${file}`);
+        }
+    }catch (e) {
+        logger.error(`Error handling Event: ${file}`, e)
     }
 }
 
